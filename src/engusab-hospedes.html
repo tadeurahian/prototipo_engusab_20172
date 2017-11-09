@@ -1,0 +1,57 @@
+<dom-module id="engusab-hospedes">
+    <template>
+        <style>
+            .container {
+                margin: 10px;
+            }
+            
+            .container paper-input {
+                margin-bottom: 10px;
+            }
+
+            .flex {
+                display: flex;
+            }
+
+            .centralizar {
+                margin: auto;
+            }
+
+            #botaoCadastrar {
+                background-color: var(--app-primary-color);
+                color: white;
+            }
+        </style>
+
+        <div class="container">
+            <paper-input label="Nome" value="{{nome}}"></paper-input>
+            <paper-input label="CPF" value="{{cpf}}"></paper-input>
+            <paper-input label="Endereço" value="{{endereco}}"></paper-input>
+            
+            <div class="flex">
+                <paper-button id="botaoCadastrar" class="centralizar" raised>Cadastrar</paper-button>
+            </div>
+        </div>
+    </template>
+    <script>
+        class EngusabHospedes extends Polymer.Element {
+            static get is() {
+                return 'engusab-hospedes';
+            }
+
+            static get properties() {
+                return {
+                    nome: String,
+                    cpf: String,
+                    endereco: String
+                };
+            }
+
+            cadastrarHospede() {
+
+            }
+        }
+
+        customElements.define(EngusabHospedes.is, EngusabHospedes);
+    </script>
+</dom-module>
