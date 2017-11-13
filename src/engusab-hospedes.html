@@ -29,7 +29,7 @@
             <paper-input label="Endereço" value="{{endereco}}"></paper-input>
             
             <div class="flex">
-                <paper-button id="botaoCadastrar" class="centralizar" raised>Cadastrar</paper-button>
+                <paper-button id="botaoCadastrar" class="centralizar" raised on-click="cadastrarHospede">Cadastrar</paper-button>
             </div>
         </div>
     </template>
@@ -48,7 +48,11 @@
             }
 
             cadastrarHospede() {
-
+                CachePersistencia.Persistir("hospedes", {
+                    nome: this.nome,
+                    cpf: this.cpf,
+                    endereco: this.endereco
+                });
             }
         }
 

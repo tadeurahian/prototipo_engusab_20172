@@ -1,0 +1,30 @@
+<dom-module id="cache-persistencia">
+    <script>
+        class CachePersistencia extends Polymer.Element {
+            static get is () {
+                return 'cache-persistencia';
+            }
+
+            static Salvar(chave, valor) {
+                window.localStorage.setItem(chave, JSON.stringify(valor)); 
+            }
+
+            static Obter(chave) {
+                return JSON.parse(window.localStorage.getItem(chave));           
+            }
+
+            static Persistir(chave, novoItem) {
+                var valoresAntigos = this.Obter(chave);
+
+                if(valoresAntigos == null)
+                    valoresAntigos = [];    
+
+                valoresAntigos.push(novoItem);                
+
+                this.Salvar(chave, valoresAntigos);
+            }
+        }
+
+        customElements.define(CachePersistencia.is, CachePersistencia);
+    </script>
+</dom-module>

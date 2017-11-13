@@ -1,9 +1,50 @@
 <dom-module id="engusab-reservas">
-    <template></template>
+    <template>
+        <style include="granite-bootstrap"></style>
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Nome</th>
+                    <th>CPF</th>
+                    <th>Endereço</th>
+                </tr>
+            </thead>
+            <tbody>
+                <template is="dom-repeat" items="{{hospedes}}">
+                    <tr>
+                        <td>{{item.nome}}</td>
+                        <td>{{item.cpf}}</td>
+                        <td>{{item.endereco}}</td>                                        
+                    </tr>
+                </template>
+            </tbody>            
+        </table>
+    </template>
     <script>
         class EngusabReservas extends Polymer.Element {
             static get is() {
                 return 'engusab-reservas';
+            }
+
+            static get properties() {
+                return {
+                    hospedes: {
+                        type: Array,
+                        notify: true
+                    }
+                };
+            }            
+
+            constructor() {
+                super();
+                this.hospedes = [];
+            }
+
+            connectedCallback() {
+                super.connectedCallback();      
+                
+                this.set("hospedes", []);
+                this.set("hospedes", CachePersistencia.Obter('hospedes'));                
             }
         }
 
