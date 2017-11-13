@@ -1,0 +1,65 @@
+<dom-module id="engusab-listareservas">
+    <template>
+        <style include="granite-bootstrap"></style>
+        <table id="tabelasClientes" class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Nome</th>
+                    <th>Data</th>
+                    <th>Quarto</th>                    
+                </tr>
+            </thead>
+            <tbody>
+                <template id="linhasReservas" is="dom-repeat" items="{{reservas}}">
+                    <tr>
+                        <td>{{item.hospede.nome}}</td>
+                        <td>{{item.data}}</td>
+                        <td>{{item.quarto}}</td>                        
+                    </tr>
+                </template>
+    </tbody>
+    </table>
+    </template>
+    <script>
+        class EngusabListaReservas extends Polymer.Element {
+            static get is() {
+                return 'engusab-listareservas';
+            }
+
+            static get properties() {
+                return {
+                    reservas: {
+                        type: Array,
+                        notify: true
+                    }
+                };
+            }
+
+            constructor() {
+                super();
+
+                addEventListener('atualizar.reservas', () => {
+                    this._atualizarReservas()
+                });
+            }
+
+            ready() {
+                super.ready();
+
+                this._atualizarReservas();
+            }
+
+            _atualizarReservas() {
+                var reservas = CachePersistencia.Obter('reservas');
+
+                this.set("reservas", []);
+                this.set("reservas", reservas);
+
+                if (this.$.linhasReservas != null)
+                    this.$.linhasReservas.render();
+            }
+        }
+
+        customElements.define(EngusabListaReservas.is, EngusabListaReservas);
+    </script>
+</dom-module>

@@ -1,24 +1,91 @@
 <dom-module id="engusab-reservas">
     <template>
         <style include="granite-bootstrap"></style>
-        <table class="table table-hover">
-            <thead>
-                <tr>
-                    <th>Nome</th>
-                    <th>CPF</th>
-                    <th>Endereço</th>
-                </tr>
-            </thead>
-            <tbody>
-                <template is="dom-repeat" items="{{hospedes}}">
+        <style>
+            .linha-hospede {
+                cursor: pointer;
+            }
+
+            .container {
+                display: flex;
+                flex-direction: column;
+                position: relative;
+            }
+
+            .container table {
+                flex: 1 0 auto;
+            }
+
+            .flex {
+                display: flex;
+            }
+
+            .centralizar {
+                margin: auto;
+            }
+
+            .container .instrucoes {
+                flex: 0 0 auto;
+                margin: auto;
+                color: blue;
+            }
+
+            #modalReserva {
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+
+                width: 400px;
+                height: 300px;
+                background-color: white;
+            }
+
+            #botaoRealizarReserva {
+                background-color: blue;
+                color: white;
+
+                margin-top: 20px;
+                margin-bottom: 20px;
+            }            
+
+            .hide {
+                display: none !important;
+            }
+        </style>
+        <div class="container">
+            <table id="tabelasClientes" class="table table-hover">
+                <thead>
                     <tr>
-                        <td>{{item.nome}}</td>
-                        <td>{{item.cpf}}</td>
-                        <td>{{item.endereco}}</td>                                        
+                        <th>Nome</th>
+                        <th>CPF</th>
+                        <th>Telefone</th>
+                        <th>Endereço</th>
                     </tr>
-                </template>
-            </tbody>            
-        </table>
+                </thead>
+                <tbody>
+                    <template id="linhasHospedes" is="dom-repeat" items="{{hospedes}}">
+                        <tr on-click="_fazerReserva" index="{{index}}" class="linha-hospede">
+                            <td>{{item.nome}}</td>
+                            <td>{{item.cpf}}</td>
+                            <td>{{item.endereco}}</td>
+                            <td>{{item.telefone}}</td>
+                        </tr>
+                    </template>
+    </tbody>
+    </table>
+    <div id="mensagemInstrucoes" class="instrucoes"> Selecione um cliente para realizar a reserva.</div>
+    <div id="areaReserva" class="hide">
+        <div>Nome Hóspede: {{hospedeSelecionado.nome}}</div>
+        <paper-input label="Data Reserva" value="{{reserva.data}}"></paper-input>
+        <paper-input label="Quarto" value="{{reserva.quarto}}"></paper-input>
+        <div class="botoes flex">
+            <paper-button id="botaoVoltar" class="centralizar" on-click="_voltar" raised>Voltar</paper-button>
+            <paper-button id="botaoRealizarReserva" class="centralizar" on-click="_confirmarReserva" raised>Confirmar</paper-button>
+        </div>
+    </div>
+    </div>
     </template>
     <script>
         class EngusabReservas extends Polymer.Element {
@@ -31,20 +98,61 @@
                     hospedes: {
                         type: Array,
                         notify: true
-                    }
+                    },
+                    exibirTabela: Boolean,
+                    hospedeSelecionado: Object,
+                    reserva: Object
                 };
-            }            
+            }
 
             constructor() {
                 super();
-                this.hospedes = [];
+
+                this.reserva = {};
+                this.reserva.data = '';
+                this.reserva.quarto = '';
+                this.reserva.hospede = '';
+
+                addEventListener('atualizar.lista.hospedes', () => {
+                    this._atualizarHospedes();
+                });
             }
 
-            connectedCallback() {
-                super.connectedCallback();      
-                
+            ready() {
+                super.ready();
+                this._atualizarHospedes();
+            }
+
+            _atualizarHospedes() {
+                var hospedes = CachePersistencia.Obter('hospedes');
+
                 this.set("hospedes", []);
-                this.set("hospedes", CachePersistencia.Obter('hospedes'));                
+                this.set("hospedes", hospedes);
+
+                if (this.$.linhasHospedes != null)
+                    this.$.linhasHospedes.render();
+            }
+
+            _fazerReserva(e) {
+                this.hospedeSelecionado = this.hospedes[e.model.index];
+                this.reserva.hospede = this.hospedeSelecionado;
+
+                this.$.areaReserva.classList.remove('hide')
+                this.$.tabelasClientes.classList.add('hide');
+                this.$.mensagemInstrucoes.classList.add('hide');
+            }
+
+            _confirmarReserva() {
+                CachePersistencia.Persistir('reservas', this.reserva);
+                this.$.areaReserva.classList.add('hide');
+                this.$.mensagemInstrucoes.classList.remove('hide');
+                this.$.tabelasClientes.classList.remove('hide');
+            }
+
+            _voltar() {
+                this.$.areaReserva.classList.add('hide');
+                this.$.mensagemInstrucoes.classList.remove('hide');
+                this.$.tabelasClientes.classList.remove('hide');
             }
         }
 

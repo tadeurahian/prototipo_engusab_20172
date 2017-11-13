@@ -17,7 +17,9 @@
         "webcomponentsjs": "webcomponents/webcomponentsjs#^1.0.0",
         "paper-input": "PolymerElements/paper-input#2.0.0",
         "paper-button": "PolymerElements/paper-button#2.0.0",
-        "granite-bootstrap": "LostInBrittany/granite-bootstrap#^4.0.2-beta.2"      
+        "granite-bootstrap": "LostInBrittany/granite-bootstrap#^4.0.2-beta.2",
+        "paper-dialog": "PolymerElements/paper-dialog#2.0.0",
+        "neon-animation": "latest"
     },
     "resolutions": {
         "polymer": "^2.0.0"

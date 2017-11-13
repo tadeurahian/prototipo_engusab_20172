@@ -12,12 +12,15 @@
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="../bower_components/neon-animation/neon-animation.html">
 
 <link rel="import" href="../bower_components/granite-bootstrap/granite-bootstrap.html">
 
-<link rel ="import" href="cache-persistencia.html">
+<link rel="import" href="cache-persistencia.html">
 <link rel="lazy-import" href="engusab-hospedes.html">
 <link rel="lazy-import" href="engusab-reservas.html">
+<link rel="lazy-import" href="engusab-listareservas.html">
 
 <dom-module id="engusab-shell">
     <template>
@@ -85,8 +88,9 @@
       <app-drawer id="drawer" slot="drawer" swipe-open="[[narrow]]">
         <app-toolbar>Menu</app-toolbar>
         <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
-          <a name="hospedes" href="[[rootPath]]hospedes">Hóspedes</a>
-          <a name="reservas" href="[[rootPath]]reservas">Reservas</a>          
+          <a name="hospedes" href="[[rootPath]]hospedes">Cadastrar Hóspedes</a>
+          <a name="reservas" href="[[rootPath]]reservas">Fazer Reservas</a>    
+          <a nome="listareservas" href="[[rootPath]]listareservas">Ver Reservas</a>      
         </iron-selector>
       </app-drawer>
 
@@ -96,17 +100,18 @@
         <app-header slot="header" condenses reveals effects="waterfall">
           <app-toolbar>
             <paper-icon-button icon="my-icons:menu" drawer-toggle></paper-icon-button>
-            <div main-title>Pousada</div>
+            <div main-title>Pousada Beira Mar</div>
           </app-toolbar>
         </app-header>
 
         <iron-pages
             selected="[[page]]"
             attr-for-selected="name"
-            fallback-selection="view404"
+            fallback-selection="hospedes"
             role="main">
           <engusab-hospedes name="hospedes"></engusab-hospedes>
-          <engusab-reservas name="reservas"></engusab-reservas>                      
+          <engusab-reservas name="reservas"></engusab-reservas>
+          <engusab-listareservas name="listareservas"></engusab-listareservas>                      
         </iron-pages>
       </app-header-layout>
     </app-drawer-layout>

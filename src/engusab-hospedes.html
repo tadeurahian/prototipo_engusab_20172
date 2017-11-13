@@ -10,7 +10,11 @@
             }
 
             .flex {
-                display: flex;
+                display: flex;                
+            }
+
+            .flex.column {
+                flex-direction: column;
             }
 
             .centralizar {
@@ -21,15 +25,23 @@
                 background-color: var(--app-primary-color);
                 color: white;
             }
+
+            .confirmacao {
+                color: blue;
+                margin: auto;
+                margin-top: 20px;
+            }
         </style>
 
         <div class="container">
             <paper-input label="Nome" value="{{nome}}"></paper-input>
             <paper-input label="CPF" value="{{cpf}}"></paper-input>
             <paper-input label="Endereço" value="{{endereco}}"></paper-input>
+            <paper-input label="Telefone" value="{{telefone}}"></paper-input>
             
-            <div class="flex">
+            <div class="flex column">
                 <paper-button id="botaoCadastrar" class="centralizar" raised on-click="cadastrarHospede">Cadastrar</paper-button>
+                <div class="confirmacao">{{mensagemSucesso}}</div>
             </div>
         </div>
     </template>
@@ -41,18 +53,50 @@
 
             static get properties() {
                 return {
-                    nome: String,
-                    cpf: String,
-                    endereco: String
+                    nome: {
+                        type: String,
+                        value: ''
+                    },
+                    cpf: {
+                        type: String,
+                        value: ''
+                    },
+                    endereco: {
+                        type: String,
+                        value: ''
+                    },
+                    telefone: {
+                        type: String,
+                        value: ''
+                    },
+                    mensagemSucesso: {
+                        type: String,
+                        value: ''
+                    }
                 };
             }
 
             cadastrarHospede() {
+
+                if (this.nome == '' || this.cpf == '' || this.endereco == '' || this.telefone == '') {
+                    this.mensagemSucesso = 'Todos os campos são obrigatórios.'
+                    return;
+                }
+
                 CachePersistencia.Persistir("hospedes", {
                     nome: this.nome,
                     cpf: this.cpf,
-                    endereco: this.endereco
+                    endereco: this.endereco,
+                    telefone: this.telefone
                 });
+
+                dispatchEvent(new CustomEvent('atualizar.lista.hospedes'));
+
+                this.mensagemSucesso = 'Cadastro realizado com sucesso!';
+                this.nome = '';
+                this.cpf = '';
+                this.endereco = '';
+                this.telefone = '';
             }
         }
 
