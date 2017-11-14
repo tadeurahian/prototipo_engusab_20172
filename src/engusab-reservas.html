@@ -80,6 +80,7 @@
         <div>Nome Hóspede: {{hospedeSelecionado.nome}}</div>
         <paper-input label="Data Reserva" value="{{reserva.data}}"></paper-input>
         <paper-input label="Quarto" value="{{reserva.quarto}}"></paper-input>
+        <paper-input label="Diárias" value="{{reserva.diarias}}"></paper-input>
         <div class="botoes flex">
             <paper-button id="botaoVoltar" class="centralizar" on-click="_voltar" raised>Voltar</paper-button>
             <paper-button id="botaoRealizarReserva" class="centralizar" on-click="_confirmarReserva" raised>Confirmar</paper-button>
@@ -112,6 +113,7 @@
                 this.reserva.data = '';
                 this.reserva.quarto = '';
                 this.reserva.hospede = '';
+                this.reserva.diarias = 0;
 
                 addEventListener('atualizar.lista.hospedes', () => {
                     this._atualizarHospedes();
@@ -147,6 +149,10 @@
                 this.$.areaReserva.classList.add('hide');
                 this.$.mensagemInstrucoes.classList.remove('hide');
                 this.$.tabelasClientes.classList.remove('hide');
+
+                this.reserva = {};
+
+                dispatchEvent(new CustomEvent('atualizar.reservas'));
             }
 
             _voltar() {
